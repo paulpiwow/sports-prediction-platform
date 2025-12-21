@@ -39,7 +39,7 @@ team_summary = (
 )
 
 team_summary["win_rate"] = team_summary["wins"] / team_summary["matches"] #compute win rate
-team_summary = team_summary.sort_values("matches", ascending=False)
+team_summary = team_summary.sort_values("matches", ascending=False) #sort by number of matches
 
 print(team_summary.head(10))
 
