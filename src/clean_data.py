@@ -20,6 +20,7 @@ def match_result(row):
     else:
         return "draw"
 
+#Look at each row and store winner in result column
 df["result"] = df.apply(match_result, axis=1)
 
 df = df[df["date"].dt.year >= 1950] #fliter to modern football
