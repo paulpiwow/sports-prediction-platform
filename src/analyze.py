@@ -114,3 +114,56 @@ baseline_preds = X_test["is_home"]
 baseline_accuracy = accuracy_score(y_test, baseline_preds)
 
 print("Baseline (home-only) accuracy:", round(baseline_accuracy, 3))
+
+# Get win probabilities instead of binary predictions
+df["win_prob"] = model.predict_proba(X)[:, 1]
+
+# Separate home and away predictions
+home_preds = df[df["is_home"] == 1][[
+    "date", "team", "opponent", "win_prob", "result"
+]].rename(columns={
+    "team": "home_team",
+    "opponent": "away_team",
+    "win_prob": "home_win_prob",
+    "result": "actual_result"
+})
+
+away_preds = df[df["is_home"] == 0][[
+    "date", "team", "opponent", "win_prob"
+]].rename(columns={
+    "team": "away_team",
+    "opponent": "home_team",
+    "win_prob": "away_win_prob"
+})
+
+# Merge home and away predictions back into matches
+match_preds = pd.merge(
+    home_preds,
+    away_preds,
+    on=["date", "home_team", "away_team"]
+)
+
+# Decide predicted match winner
+def predict_match(row):
+    if row["home_win_prob"] > row["away_win_prob"]:
+        return "home_win"
+    else:
+        return "away_win"
+    
+match_preds["predicted_result"] = match_preds.apply(predict_match, axis=1)
+
+# Evaluate match-level accuracy
+match_accuracy = (
+    match_preds["predicted_result"] == match_preds["actual_result"]
+).mean()
+
+print("Match-level prediction accuracy:", round(match_accuracy, 3))
+
+# Save match-level predictions
+ANALYSIS_DIR = BASE_DIR / "data" / "analysis"
+ANALYSIS_DIR.mkdir(exist_ok=True)
+
+MATCH_PRED_PATH = ANALYSIS_DIR / "match_predictions.csv"
+match_preds.to_csv(MATCH_PRED_PATH, index=False)
+
+print("Saved match-level predictions to:", MATCH_PRED_PATH)
