@@ -76,13 +76,14 @@ team_matches.to_csv(FEATURES_PATH, index=False)
 print("\nSaved feature table to:", FEATURES_PATH)
 
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
 FEATURES_PATH = BASE_DIR / "data" / "processed" / "team_match_features.csv"
 df = pd.read_csv(FEATURES_PATH)
 df["date"] = pd.to_datetime(df["date"])
 
-#Define what the model learns from
+#Define what the LR model learns from
 features = [
     "is_home",
     "goals_for_rolling",
@@ -100,15 +101,15 @@ test = df["date"] >= "2018-01-01"
 X_train, X_test = X[train], X[test]
 y_train, y_test = y[train], y[test]
 
-#Train the model
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
+#Train Logistic Regression model
+lr_model = LogisticRegression(max_iter=1000)
+lr_model.fit(X_train, y_train)
 
 #Evaluate accuracy
-preds = model.predict(X_test)
-accuracy = accuracy_score(y_test, preds)
+preds = lr_model.predict(X_test)
+lr_accuracy = accuracy_score(y_test, preds)
 
-print("\nInitial model accuracy:", round(accuracy, 3))
+print("\nInitial model accuracy:", round(lr_accuracy, 3))
 
 baseline_preds = X_test["is_home"]
 baseline_accuracy = accuracy_score(y_test, baseline_preds)
@@ -116,7 +117,7 @@ baseline_accuracy = accuracy_score(y_test, baseline_preds)
 print("Baseline (home-only) accuracy:", round(baseline_accuracy, 3))
 
 # Get win probabilities instead of binary predictions
-df["win_prob"] = model.predict_proba(X)[:, 1]
+df["win_prob"] = lr_model.predict_proba(X)[:, 1]
 
 # Separate home and away predictions
 home_preds = df[df["is_home"] == 1][[
@@ -167,3 +168,37 @@ MATCH_PRED_PATH = ANALYSIS_DIR / "match_predictions.csv"
 match_preds.to_csv(MATCH_PRED_PATH, index=False)
 
 print("Saved match-level predictions to:", MATCH_PRED_PATH)
+
+#Train Random Forest model
+rf_model = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=10,
+    random_state=42
+)
+
+rf_model.fit(X_train, y_train)
+
+rf_preds = rf_model.predict(X_test)
+rf_accuracy = accuracy_score(y_test, rf_preds)
+
+print("Random Forest accuracy:", round(rf_accuracy, 3))
+
+print("\nModel comparison:")
+print("Logistic Regression accuracy:", round(lr_accuracy, 3))
+print("Random Forest accuracy:", round(rf_accuracy, 3))
+
+rf_importance = pd.Series(
+    rf_model.feature_importances_,
+    index=features
+).sort_values(ascending=False)
+
+print("\nRandom Forest feature importance:")
+print(rf_importance)
+
+import joblib
+
+MODELS_DIR = BASE_DIR / "models"
+MODELS_DIR.mkdir(exist_ok=True)
+
+joblib.dump(rf_model, MODELS_DIR / "rf_model.pkl")
+print("Saved Random Forest model")
