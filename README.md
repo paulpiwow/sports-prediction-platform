@@ -116,13 +116,17 @@ The trained Random Forest model is deployed via a REST API.
 ### Start the API
 ```bash
 uvicorn src.api:app --reload
+```
 
 ### Interactive Docs
+```bash
 http://127.0.0.1:8000/docs
-
+```
 ###Example Request
+```bash
 /predict?home_team=Brazil&away_team=Germany
-
+```
+```bash
 ###Example Response
 {
   "home_team": "Brazil",
@@ -131,6 +135,7 @@ http://127.0.0.1:8000/docs
   "away_win_prob": 0.38,
   "predicted_winner": "Brazil"
 }
+```
 
 ## ⚖️ Model Comparison: Logistic Regression vs Random Forest
 
