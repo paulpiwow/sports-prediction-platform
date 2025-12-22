@@ -22,7 +22,7 @@ FEATURE_COLS = [
     "win_rolling"
 ]
 
-app = FastAPI(title="Football Match Predictor")
+app = FastAPI(title="Match Predictor")
 
 
 #Create prediction endpoint
