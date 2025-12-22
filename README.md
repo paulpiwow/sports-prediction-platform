@@ -20,30 +20,6 @@ The dataset includes **45,000+ international matches** spanning multiple decades
 
 ---
 
-## 🧱 Project Structure
-
-international-football-data-pipeline/
-│
-├── data/
-│ ├── raw/ # Original CSV files (unmodified)
-│ ├── processed/ # Cleaned and feature-engineered data
-│ └── analysis/ # Model outputs and predictions
-│
-├── models/
-│ └── rf_model.pkl # Trained Random Forest model
-│
-├── src/
-│ ├── load_data.py # Load and inspect raw data
-│ ├── clean_data.py # Data cleaning and preprocessing
-│ ├── analyze.py # Feature engineering + model training
-│ └── api.py # FastAPI prediction service
-│
-├── requirements.txt
-└── README.md
-
-
----
-
 ## 🔄 Data Pipeline
 
 ### 1️⃣ Load Data
@@ -122,12 +98,14 @@ uvicorn src.api:app --reload
 ```bash
 http://127.0.0.1:8000/docs
 ```
-###Example Request
+
+### Example Request
 ```bash
 /predict?home_team=Brazil&away_team=Germany
 ```
+
+### Example Response
 ```bash
-###Example Response
 {
   "home_team": "Brazil",
   "away_team": "Germany",
