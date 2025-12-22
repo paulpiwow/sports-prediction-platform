@@ -75,3 +75,42 @@ FEATURES_PATH = FEATURES_DIR / "team_match_features.csv"
 team_matches.to_csv(FEATURES_PATH, index=False)
 print("\nSaved feature table to:", FEATURES_PATH)
 
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+FEATURES_PATH = BASE_DIR / "data" / "processed" / "team_match_features.csv"
+df = pd.read_csv(FEATURES_PATH)
+df["date"] = pd.to_datetime(df["date"])
+
+#Define what the model learns from
+features = [
+    "is_home",
+    "goals_for_rolling",
+    "goals_against_rolling",
+    "win_rolling"
+]
+
+X = df[features]
+y = df["win"].astype(int)
+
+#Split by time, not randomly
+train = df["date"] < "2018-01-01"
+test = df["date"] >= "2018-01-01"
+
+X_train, X_test = X[train], X[test]
+y_train, y_test = y[train], y[test]
+
+#Train the model
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+#Evaluate accuracy
+preds = model.predict(X_test)
+accuracy = accuracy_score(y_test, preds)
+
+print("\nInitial model accuracy:", round(accuracy, 3))
+
+baseline_preds = X_test["is_home"]
+baseline_accuracy = accuracy_score(y_test, baseline_preds)
+
+print("Baseline (home-only) accuracy:", round(baseline_accuracy, 3))
