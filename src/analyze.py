@@ -1,53 +1,77 @@
 from pathlib import Path
 import pandas as pd
 
+# Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 CLEAN_PATH = BASE_DIR / "data" / "processed" / "clean_results.csv"
 
+# Load cleaned data
 df = pd.read_csv(CLEAN_PATH)
 df["date"] = pd.to_datetime(df["date"])
 
-#Checks
+print("Loaded cleaned data")
 print("Total matches:", len(df))
 print("Date range:", df["date"].min(), "→", df["date"].max())
 print(df["result"].value_counts())
 
-#Win rates by home/away
-result_counts = df["result"].value_counts(normalize=True) * 100
-print("\nOverall result distribution (%):")
-print(result_counts.round(2))
+# Create team-level match rows
+# (one row per team per match creates a symmetric, ML-friendly dataset)
 
-#Compute total matches and win rates per team
-home = df[["home_team", "result"]].copy()   #create smaller DF with only home_team
-home["team"] = home["home_team"]
-home["is_win"] = home["result"] == "home_win" #true if home team won, false otherwise
+# Home team perspective
+home_df = df[[
+    "date", "home_team", "away_team",
+    "home_score", "away_score", "result"
+]].copy()
 
-away = df[["away_team", "result"]].copy()
-away["team"] = away["away_team"]
-away["is_win"] = away["result"] == "away_win"
+home_df["team"] = home_df["home_team"]
+home_df["opponent"] = home_df["away_team"]
+home_df["goals_for"] = home_df["home_score"]
+home_df["goals_against"] = home_df["away_score"]
+home_df["is_home"] = 1
+home_df["win"] = home_df["result"] == "home_win"
 
-team_results = pd.concat([home[["team", "is_win"]],
-                          away[["team", "is_win"]]])
+# Away team perspective
+away_df = df[[
+    "date", "home_team", "away_team",
+    "home_score", "away_score", "result"
+]].copy()
 
-team_summary = (
-    team_results
-    .groupby("team")    #group all rows by team name
-    .agg(
-        matches=("is_win", "count"), #compute number of rows per team
-        wins=("is_win", "sum") #compute sum of True values
+away_df["team"] = away_df["away_team"]
+away_df["opponent"] = away_df["home_team"]
+away_df["goals_for"] = away_df["away_score"]
+away_df["goals_against"] = away_df["home_score"]
+away_df["is_home"] = 0
+away_df["win"] = away_df["result"] == "away_win"
+
+# Combine home + away rows
+team_matches = pd.concat([home_df, away_df], ignore_index=True)
+team_matches = team_matches.sort_values("date")
+
+print("\nTeam-level match table created")
+print(team_matches.head())
+
+# Create rolling predictors
+ROLLING_WINDOW = 5
+rolling_cols = ["goals_for", "goals_against", "win"]
+
+for col in rolling_cols:
+    team_matches[f"{col}_rolling"] = (
+        team_matches
+        .groupby("team")[col]
+        .rolling(ROLLING_WINDOW, min_periods=1)
+        .mean()
+        .reset_index(level=0, drop=True)
     )
-)
 
-team_summary["win_rate"] = team_summary["wins"] / team_summary["matches"] #compute win rate
-team_summary = team_summary.sort_values("matches", ascending=False) #sort by number of matches
+print("\nRolling features created")
+print(team_matches[
+    ["team", "date", "goals_for_rolling", "goals_against_rolling", "win_rolling"]
+].head(10))
 
-print(team_summary.head(10))
+# Save features for modeling
+FEATURES_DIR = BASE_DIR / "data" / "processed"
+FEATURES_PATH = FEATURES_DIR / "team_match_features.csv"
 
-#Save analysis outputs
-ANALYSIS_DIR = BASE_DIR / "data" / "analysis"
-ANALYSIS_DIR.mkdir(exist_ok=True)
+team_matches.to_csv(FEATURES_PATH, index=False)
+print("\nSaved feature table to:", FEATURES_PATH)
 
-team_summary.to_csv(ANALYSIS_DIR / "team_win_rates.csv")
-result_counts.to_csv(ANALYSIS_DIR / "overall_result_distribution.csv")
-
-print("Analysis complete")
