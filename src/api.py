@@ -69,3 +69,24 @@ def predict(home_team: str, away_team: str):
         "away_win_prob": round(away_prob, 3),
         "predicted_winner": predicted_winner
     }
+
+#Create teams endpoint
+@app.get("/teams")
+def get_teams():
+    """
+    Return a sorted list of all unique teams in the dataset.
+    Used by the frontend to populate dropdowns.
+    """
+    teams = sorted(features_df["team"].unique().tolist())
+    return teams
+
+#Enable CORS
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
