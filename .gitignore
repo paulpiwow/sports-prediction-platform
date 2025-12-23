@@ -1,8 +1,0 @@
-.venv/
-__pycache__/
-*.pyc
-
-#Raw datasets
-data/nba/raw/games_details.csv
-data/nba/raw/players.csv
-data/nba/raw/ranking.csv
