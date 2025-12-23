@@ -1,7 +1,3 @@
-
-# 🎨 Frontend README (`frontend/README.md`)
-
-```md
 # Sports Match Predictor Frontend
 
 A React-based frontend application that allows users to interactively predict **Soccer** and **NBA** match outcomes using a machine learning API.
