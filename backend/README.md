@@ -1,112 +1,84 @@
-# 🏆 International Football Match Prediction Pipeline
+# Sports Match Prediction API
 
-An end-to-end machine learning project that predicts the outcome of international football matches using historical data, rolling performance features, and supervised learning models.  
-The project demonstrates a full **data → model → API** pipeline using Python, pandas, scikit-learn, and FastAPI.
-
----
-
-## 📌 Project Overview
-
-This project builds a production-style machine learning workflow that:
-
-- Ingests raw historical football match data
-- Cleans and preprocesses the data
-- Engineers rolling performance features at the team level
-- Trains and evaluates machine learning models
-- Combines team-level predictions into match-level predictions
-- Serves predictions through a REST API
-
-The dataset includes **45,000+ international matches** spanning multiple decades.
+A FastAPI-based machine learning backend that predicts match outcomes for **Soccer** and **NBA** games using historical data, feature engineering, and trained classification models.
 
 ---
 
-## 🔄 Data Pipeline
+## 🚀 Features
 
-### 1️⃣ Load Data
-- Reads raw CSV match data using pandas
-- Inspects schema, data types, and missing values
-
-### 2️⃣ Clean Data
-- Standardizes column formats
-- Converts dates to datetime
-- Derives match outcomes (`home_win`, `away_win`, `draw`)
-- Removes invalid or incomplete records
-
-### 3️⃣ Feature Engineering
-- Converts match-level data into team-level observations
-- Creates rolling statistics per team:
-  - Rolling goals scored
-  - Rolling goals conceded
-  - Rolling win rate
-- Encodes home/away context explicitly
-
-These rolling features allow the model to learn **form and momentum**, not just raw scores.
+- Supports **multiple sports** (Soccer & NBA)
+- Machine learning predictions using:
+  - Logistic Regression
+  - Random Forest
+- Rolling feature engineering (recent performance trends)
+- Match-level probability predictions
+- REST API built with **FastAPI**
+- Designed for easy frontend integration
 
 ---
 
-## 🤖 Machine Learning Models
+## 🧠 How Predictions Work
 
-Two models are trained and compared:
+Instead of predicting match results directly, the system:
 
-### Logistic Regression (Baseline)
-- Simple, interpretable linear classifier
-- Serves as a strong baseline
+1. Builds **team-level rolling statistics** (recent wins, scoring, defense)
+2. Predicts **win probability for each team**
+3. Compares probabilities
+4. Returns the team with the higher probability as the predicted winner
 
-### Random Forest Classifier
-- Non-linear ensemble model
-- Captures interactions and thresholds between features
-
-Both models are trained using the same feature set and evaluated on a held-out test set.
+This mirrors real-world sports analytics systems.
 
 ---
 
-## 📊 Model Evaluation
+## 📂 Project Structure
 
-Metrics used:
-- Accuracy
-- Baseline comparison (home-only prediction)
-- Match-level accuracy after combining team predictions
+backend/
+├── src/
+│ ├── api.py # FastAPI app + endpoints
+│ ├── soccer/ # Soccer pipeline (ingest, features, models)
+│ └── nba/ # NBA pipeline (ingest, features, models)
+├── data/
+│ ├── soccer/
+│ └── nba/
+├── models/
+│ ├── soccer/
+│ └── nba/
+├── requirements.txt
+└── README.md
 
-### Example Results
-- Logistic Regression Accuracy: **~73.6%**
-- Random Forest Accuracy: **~73.6%**
-- Match-Level Accuracy: **~65%**
-
----
-
-## 🔁 Match-Level Prediction Logic
-
-Instead of predicting matches directly, the system:
-1. Predicts **win probability for each team**
-2. Combines home and away probabilities
-3. Selects the team with the higher probability as the predicted winner
-
-This mirrors how real sports analytics systems operate.
 
 ---
 
-## 🌐 API Deployment (FastAPI)
+## 🔌 API Endpoints
 
-The trained Random Forest model is deployed via a REST API.
+### Health Check
 
-### Start the API
-```bash
-uvicorn src.api:app --reload
-```
+GET/
 
-### Interactive Docs
-```bash
-http://127.0.0.1:8000/docs
-```
+Returns API status.
 
-### Example Request
-```bash
-/predict?home_team=Brazil&away_team=Germany
-```
+---
 
-### Example Response
-```bash
+### Get Teams
+
+GET /teams?sport=soccer
+GET /teams?sport=nba
+
+
+Returns a list of available teams for the selected sport.
+
+---
+
+### Predict Match
+
+GET /predict?sport=soccer&home_team=Brazil&away_team=Germany
+GET /predict?sport=nba&home_team=1610612738&away_team=1610612747
+
+
+#### Example Response
+```json
 {
+  "sport": "soccer",
   "home_team": "Brazil",
   "away_team": "Germany",
   "home_win_prob": 0.62,
@@ -114,54 +86,57 @@ http://127.0.0.1:8000/docs
   "predicted_winner": "Brazil"
 }
 ```
-
-## ⚖️ Model Comparison: Logistic Regression vs Random Forest
-
-### Why Both Models Were Used
-
-Using two different models allows us to evaluate:
-
-- Predictive performance  
-- Interpretability  
-- Model complexity trade-offs  
-
 ---
+
+## Models Used
 
 ### Logistic Regression
 
-#### Advantages
-- Highly interpretable coefficients  
-- Fast to train and predict  
-- Less prone to overfitting on small feature sets  
-- Easy to explain in production environments  
-
-#### Disadvantages
-- Assumes linear decision boundaries  
-- Cannot naturally capture feature interactions  
-- Limited flexibility with complex patterns  
-
----
+* Interpretable
+* Fast
+* Strong baseline
 
 ### Random Forest
 
-#### Advantages
-- Captures non-linear relationships  
-- Handles feature interactions automatically  
-- Robust to outliers and noise  
-- Provides feature importance scores  
-
-#### Disadvantages
-- Less interpretable than linear models  
-- More computationally expensive  
-- Gains are limited if features are already well-engineered  
+* Captures non-linear patterns
+* Feature importance analysis
+* Robust to noise
 
 ---
 
-### Why Both Achieved Similar Accuracy
+## Running the Backend
 
-Both models achieved nearly identical accuracy because the engineered rolling features produce an **approximately linear decision boundary**.  
-With strong, smooth features (win rate, goal averages, and home advantage), logistic regression is already close to optimal.
+## Activate Virtual Environment
+```bash
+{
+source .venv/bin/activate     # macOS/Linux
+.venv\Scripts\activate        # Windows
+}
+```
 
-In this scenario:
-- **Logistic Regression** excels due to simplicity  
-- **Random Forest** confirms feature importance but offers limited additional lift  
+## Install Dependencies
+```bash
+{
+pip install -r requirements.txt
+}
+```
+
+## Start API Server
+```bash
+{
+uvicorn src.api:app --reload
+}
+```
+
+## Open API Docs
+```bash
+{
+http://127.0.0.1:8000/docs
+}
+```
+
+## Notes
+
+* Raw datasets are ignored via .gitignore
+* Trained models are stored as .pkl files
+* Designed to scale to additional sports (NFL, MLB)
