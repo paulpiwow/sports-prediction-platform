@@ -1,6 +1,4 @@
 
----
-
 # 🎨 Frontend README (`frontend/README.md`)
 
 ```md
