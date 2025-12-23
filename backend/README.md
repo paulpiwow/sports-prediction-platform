@@ -30,24 +30,6 @@ This mirrors real-world sports analytics systems.
 
 ---
 
-## 📂 Project Structure
-
-backend/
-├── src/
-│ ├── api.py # FastAPI app + endpoints
-│ ├── soccer/ # Soccer pipeline (ingest, features, models)
-│ └── nba/ # NBA pipeline (ingest, features, models)
-├── data/
-│ ├── soccer/
-│ └── nba/
-├── models/
-│ ├── soccer/
-│ └── nba/
-├── requirements.txt
-└── README.md
-
-
----
 
 ## 🔌 API Endpoints
 
