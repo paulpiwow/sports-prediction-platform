@@ -60,3 +60,76 @@ button:hover {
   padding: 1rem;
   border-radius: 8px;
 }
+
+.predictor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.predictor-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.predictor-card select,
+.predictor-card button {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+}
+
+.soccer {
+  border-top: 5px solid #2ecc71;
+}
+
+.nba {
+  border-top: 5px solid #f39c12;
+}
+
+
+
+.home-container {
+  min-height: 100vh;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding-top: 3rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 3rem;
+}
+
+.sport-card {
+  height: 280px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  font-size: 1.4rem;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.sport-card:hover {
+  transform: scale(1.05);
+}
+
+.page {
+  padding: 2rem;
+}
+
+.back-link {
+  text-decoration: none;
+  color: #3498db;
+  font-size: 1.1rem;
+}
