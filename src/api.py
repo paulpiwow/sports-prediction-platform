@@ -20,10 +20,12 @@ soccer_features["date"] = pd.to_datetime(soccer_features["date"])
 # NBA: model + data
 NBA_MODEL_PATH = BASE_DIR / "models" / "nba" / "rf_model.pkl"
 NBA_FEATURES_PATH = BASE_DIR / "data" / "nba" / "processed" / "team_features.csv"
+NBA_TEAMS_PATH = BASE_DIR / "data" / "nba" / "raw" / "teams.csv"
 
 nba_model = joblib.load(NBA_MODEL_PATH)
 nba_features = pd.read_csv(NBA_FEATURES_PATH)
 nba_features["date"] = pd.to_datetime(nba_features["date"])
+nba_teams_df = pd.read_csv(NBA_TEAMS_PATH)
 
 # SOCCER prediction helper
 def predict_soccer_match(home_team: str, away_team: str):
@@ -108,6 +110,44 @@ def predict_nba_match(home_team: str, away_team: str):
         "predicted_winner": predicted_winner
     }
 
+#For soccer /teams endpoint
+def get_soccer_teams():
+    teams = sorted(soccer_features["team"].unique().tolist())
+    return [
+        {
+            "id": team,
+            "name": team
+        }
+        for team in teams
+    ]
+
+#For NBA /teams endpoint
+def get_nba_teams():
+    return [
+        {
+            "id": int(row["TEAM_ID"]),
+            "name": f'{row["CITY"]} {row["NICKNAME"]}'
+        }
+        for _, row in nba_teams_df.iterrows()
+    ]
+
+
+@app.get("/teams")
+def get_teams(sport: str):
+    sport = sport.lower()
+
+    if sport == "soccer":
+        return get_soccer_teams()
+
+    elif sport == "nba":
+        return get_nba_teams()
+
+    else:
+        return {
+            "error": f"Unsupported sport: {sport}"
+        }
+
+
 # API route
 @app.get("/predict")
 def predict(
@@ -117,15 +157,18 @@ def predict(
 ):
     sport = sport.lower()
 
-    if sport == "soccer":
-        return predict_soccer_match(home_team, away_team)
+    try:
+        if sport == "soccer":
+            return predict_soccer_match(home_team, away_team)
 
-    elif sport == "nba":
-        return predict_nba_match(home_team, away_team)
+        elif sport == "nba":
+            return predict_nba_match(home_team, away_team)
 
-    else:
-        return {
-            "error": f"Unsupported sport: {sport}"
+        else:
+            return {"error": f"Unsupported sport: {sport}"}
+
+    except ValueError as e:
+        return {"error": str(e)
         }
 
 # Health check
