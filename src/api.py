@@ -6,11 +6,11 @@ import joblib
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load model
-model = joblib.load(BASE_DIR / "models" / "rf_model.pkl")
+model = joblib.load(BASE_DIR / "models" / "soccer" / "rf_model.pkl")
 
 # Load team history
 features_df = pd.read_csv(
-    BASE_DIR / "data" / "processed" / "team_match_features.csv"
+    BASE_DIR / "data" / "soccer" / "processed" / "team_match_features.csv"
 )
 
 features_df["date"] = pd.to_datetime(features_df["date"])
