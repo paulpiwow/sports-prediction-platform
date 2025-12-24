@@ -15,7 +15,7 @@ export default function NbaPredictor() {
 
   // Fetch NBA teams
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/teams?sport=nba")
+    fetch("https://sports-prediction-platform.onrender.com/teams?sport=nba")
       .then(res => res.json())
       .then(setTeams)
       .catch(err => console.error("Failed to load NBA teams", err));
@@ -28,7 +28,7 @@ export default function NbaPredictor() {
     setResult(null);
 
     fetch(
-      `http://127.0.0.1:8000/predict?sport=nba&home_team=${encodeURIComponent(
+      `https://sports-prediction-platform.onrender.com/predict?sport=nba&home_team=${encodeURIComponent(
         homeTeam.name
       )}&away_team=${encodeURIComponent(awayTeam.name)}`
     )

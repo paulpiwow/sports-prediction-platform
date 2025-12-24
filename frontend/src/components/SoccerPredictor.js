@@ -9,7 +9,7 @@ export default function SoccerPredictor() {
 
   // Fetch soccer teams on mount
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/teams?sport=soccer")
+    fetch("https://sports-prediction-platform.onrender.com/teams?sport=soccer")
       .then(res => res.json())
       .then(data => setTeams(data))
       .catch(err => console.error("Failed to load teams:", err));
@@ -43,7 +43,7 @@ export default function SoccerPredictor() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/predict?sport=soccer&home_team=${homeTeam}&away_team=${awayTeam}`
+        `https://sports-prediction-platform.onrender.com/predict?sport=soccer&home_team=${homeTeam}&away_team=${awayTeam}`
       );
       const data = await res.json();
       setResult(data);

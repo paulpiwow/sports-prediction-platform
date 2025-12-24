@@ -8,7 +8,7 @@ export default function NflPredictor() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/teams?sport=nfl")
+        fetch("https://sports-prediction-platform.onrender.com/teams?sport=nfl")
             .then(res => res.json())
             .then(setTeams);
     }, []);
@@ -18,7 +18,7 @@ export default function NflPredictor() {
         setResult(null);
 
         fetch(
-            `http://127.0.0.1:8000/predict?sport=nfl&home_team=${homeTeam}&away_team=${awayTeam}`
+            `https://sports-prediction-platform.onrender.com/predict?sport=nfl&home_team=${homeTeam}&away_team=${awayTeam}`
         )
             .then(res => res.json())
             .then(data => {
