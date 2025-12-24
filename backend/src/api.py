@@ -43,11 +43,13 @@ nba_teams_df = pd.read_csv(NBA_TEAMS_PATH)
 
 # NFL assets
 nfl_features = pd.read_csv(
-    "data/nfl/processed/team_games.csv",
+    BASE_DIR / "data/nfl/processed/team_games.csv",
     parse_dates=["date"]
 )
-nfl_model = joblib.load("models/nfl_model.pkl")
 
+nfl_model = joblib.load(
+    BASE_DIR / "models/nfl_model.pkl"
+)
 
 
 # SOCCER prediction helper
