@@ -153,20 +153,53 @@ export default function SoccerPredictor() {
 
           {/* STATS CARD */}
           <div className="stats-card">
-            <h3>Match Breakdown</h3>
+            <h3>📊 Match Breakdown</h3>
 
-            <p><strong>Home Team:</strong> {result.home_team}</p>
-            <p><strong>Away Team:</strong> {result.away_team}</p>
+            {/* HOME TEAM */}
+            <div className="stats-row">
+              <div className="stats-label">Home Team</div>
+              <div className="stats-value">{result.home_team}</div>
+            </div>
 
-            <p>
-              <strong>Home Win Probability:</strong>{" "}
-              {result.home_win_prob}
-            </p>
+            {/* AWAY TEAM */}
+            <div className="stats-row">
+              <div className="stats-label">Away Team</div>
+              <div className="stats-value">{result.away_team}</div>
+            </div>
 
-            <p>
-              <strong>Away Win Probability:</strong>{" "}
-              {result.away_win_prob}
-            </p>
+            {/* HOME PROB */}
+            <div className="stats-row">
+              <div className="stats-label">Home Win Probability</div>
+              <div
+                className={`stats-value ${result.home_win_prob > result.away_win_prob ? "leading" : "trailing"
+                  }`}
+              >
+                {(result.home_win_prob * 100).toFixed(1)}%
+              </div>
+              <div className="prob-bar">
+                <div
+                  className="prob-fill home"
+                  style={{ width: `${result.home_win_prob * 100}%` }}
+                />
+              </div>
+            </div>
+
+            {/* AWAY PROB */}
+            <div className="stats-row">
+              <div className="stats-label">Away Win Probability</div>
+              <div
+                className={`stats-value ${result.away_win_prob > result.home_win_prob ? "leading" : "trailing"
+                  }`}
+              >
+                {(result.away_win_prob * 100).toFixed(1)}%
+              </div>
+              <div className="prob-bar">
+                <div
+                  className="prob-fill away"
+                  style={{ width: `${result.away_win_prob * 100}%` }}
+                />
+              </div>
+            </div>
           </div>
 
         </div>

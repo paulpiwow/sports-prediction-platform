@@ -143,10 +143,20 @@ button:hover {
 
 .team-selection-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
+
+
+.team-card,
+.winner-card,
+.stats-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+
 
 .team-card {
   background: white;
@@ -174,18 +184,12 @@ button:hover {
 }
 
 .predict-button {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto 2rem;
+  position: static !important;   /* CRITICAL */
+  margin: 2.5rem auto;
   display: block;
-  padding: 0.9rem;
-  font-size: 1.1rem;
-  background: #2490ff;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  width: 60%;
 }
+
 
 .result-card {
   margin-top: 2rem;
@@ -197,10 +201,12 @@ button:hover {
 /* RESULTS LAYOUT */
 .result-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+  position: relative;
 }
+
 
 /* WINNER CARD */
 .winner-card {
@@ -208,9 +214,16 @@ button:hover {
   color: white;
   border-radius: 16px;
   padding: 2rem;
-  text-align: center;
   box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+
+  /* CENTER EVERYTHING */
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* horizontal center */
+  justify-content: center;  /* vertical center */
+  text-align: center;
 }
+
 
 .winner-card h2 {
   margin-top: 1rem;
@@ -225,17 +238,101 @@ button:hover {
 }
 
 /* STATS CARD */
+/* === MATCH BREAKDOWN (ELITE VERSION) === */
 .stats-card {
-  background: #f1f5f9;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  position: relative;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  padding: 2.4rem;
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.stats-card p {
-  margin: 0.75rem 0;
-  font-size: 1.05rem;
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
+
+/* subtle background pattern */
+.stats-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top right, rgba(59,130,246,0.08), transparent 55%),
+    radial-gradient(circle at bottom left, rgba(34,197,94,0.08), transparent 55%);
+  pointer-events: none;
+}
+
+/* HEADER */
+.stats-card h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 1.8rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* === ROWS === */
+.stats-row {
+  margin-bottom: 1.4rem;
+}
+
+.stats-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 0.35rem;
+}
+
+.stats-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* === PROBABILITY BAR === */
+.prob-bar {
+  position: relative;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.prob-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.prob-fill.home {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+}
+
+.prob-fill.away {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+/* === EMPHASIS FOR LEADER === */
+.leading {
+  color: #16a34a;
+}
+
+.trailing {
+  color: #94a3b8;
+}
+
 
 .team-flag {
   width: 64px;
