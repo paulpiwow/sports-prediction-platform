@@ -5,7 +5,7 @@ export default function SoccerPage() {
   return (
     <div className="page">
       <Link to="/" className="back-link">← Back</Link>
-      <h1>⚽ Soccer Predictor</h1>
+      <h1>⚽ World Cup Predictor</h1>
 
       <div className="predictor-container">
         <SoccerPredictor />

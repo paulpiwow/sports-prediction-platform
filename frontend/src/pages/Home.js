@@ -21,7 +21,7 @@ export default function Home() {
           }}
           onClick={() => navigate("/soccer")}
         >
-          <h2>⚽ Soccer Predictor</h2>
+          <h2>⚽ World Cup Predictor</h2>
           <p>International match predictions</p>
         </div>
 
