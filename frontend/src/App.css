@@ -214,15 +214,17 @@ button:hover {
   color: white;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
 
-  /* CENTER EVERYTHING */
+  /* ADD THESE */
   display: flex;
   flex-direction: column;
-  align-items: center;      /* horizontal center */
-  justify-content: center;  /* vertical center */
+  justify-content: center;
+  align-items: center;
+
   text-align: center;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
 }
+
 
 
 .winner-card h2 {
@@ -391,4 +393,111 @@ button:hover {
 .predictor-container {
   max-width: 1100px;   /* THIS is the key */
   margin: 0 auto;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+  font-size: 1.05rem;
+}
+
+.stat-block {
+  margin-top: 1.25rem;
+}
+
+.stat-block label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+.progress {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill.home {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+.progress-fill.away {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+  font-size: 1.05rem;
+}
+
+.stat-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.probability-block {
+  margin-top: 1.4rem;
+}
+
+.prob-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 0.4rem;
+}
+
+.prob-bar {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.prob-fill.home {
+  height: 100%;
+  background: #3b82f6;
+  border-radius: 999px;
+}
+
+.prob-fill.away {
+  height: 100%;
+  background: #22c55e;
+  border-radius: 999px;
+}
+
+.prob-value {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-weight: 600;
+}
+
+.team-block {
+  margin-bottom: 1.2rem;
+}
+
+.team-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.team-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #0f172a;
 }

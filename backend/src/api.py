@@ -41,6 +41,15 @@ nba_features = pd.read_csv(NBA_FEATURES_PATH)
 nba_features["date"] = pd.to_datetime(nba_features["date"])
 nba_teams_df = pd.read_csv(NBA_TEAMS_PATH)
 
+# NFL assets
+nfl_features = pd.read_csv(
+    "data/nfl/processed/team_games.csv",
+    parse_dates=["date"]
+)
+nfl_model = joblib.load("models/nfl_model.pkl")
+
+
+
 # SOCCER prediction helper
 def predict_soccer_match(home_team: str, away_team: str):
     home_rows = soccer_features[soccer_features["team"] == home_team]
@@ -131,6 +140,44 @@ def predict_nba_match(home_team: str, away_team: str):
         "predicted_winner": predicted_winner
     }
 
+def predict_nfl_match(home_team: str, away_team: str):
+    home_rows = nfl_features[nfl_features["team"] == home_team]
+    away_rows = nfl_features[nfl_features["team"] == away_team]
+
+    if home_rows.empty or away_rows.empty:
+        raise ValueError("One or both NFL teams not found")
+
+    home_latest = home_rows.sort_values("date").iloc[-1]
+    away_latest = away_rows.sort_values("date").iloc[-1]
+
+    home_input = [[
+        1,
+        home_latest["points_for_rolling"],
+        home_latest["points_against_rolling"],
+        home_latest["win_rate_rolling"],
+        home_latest["point_diff_rolling"]
+    ]]
+
+    away_input = [[
+        0,
+        away_latest["points_for_rolling"],
+        away_latest["points_against_rolling"],
+        away_latest["win_rate_rolling"],
+        away_latest["point_diff_rolling"]
+    ]]
+
+    home_prob = nfl_model.predict_proba(home_input)[0][1]
+    away_prob = nfl_model.predict_proba(away_input)[0][1]
+
+    return {
+        "sport": "nfl",
+        "home_team": home_team,
+        "away_team": away_team,
+        "home_win_prob": round(home_prob, 3),
+        "away_win_prob": round(away_prob, 3),
+        "predicted_winner": home_team if home_prob > away_prob else away_team
+    }
+
 
 #For soccer /teams endpoint
 def get_soccer_teams():
@@ -153,6 +200,10 @@ def get_nba_teams():
         for _, row in nba_teams_df.iterrows()
     ]
 
+def get_nfl_teams():
+    teams = sorted(nfl_features["team"].unique().tolist())
+    return [{"id": team, "name": team} for team in teams]
+
 
 @app.get("/teams")
 def get_teams(sport: str):
@@ -163,6 +214,9 @@ def get_teams(sport: str):
 
     elif sport == "nba":
         return get_nba_teams()
+    
+    elif sport == "nfl":
+        return get_nfl_teams()
 
     else:
         return {
@@ -185,6 +239,9 @@ def predict(
 
         elif sport == "nba":
             return predict_nba_match(home_team, away_team)
+        
+        elif sport == "nfl":
+            return predict_nfl_match(home_team, away_team)
 
         else:
             return {"error": f"Unsupported sport: {sport}"}
