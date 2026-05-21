@@ -1,22 +1,22 @@
-# 🏆 Sports Match Predictor Platform
+#  Sports Match Predictor Platform
 
 > A full-stack machine learning web application that predicts outcomes of international soccer, NBA, and NFL games using statistical modeling, real historical datasets, and cloud-deployed APIs.
 
 ---
 
-# 🌐 Live Demo
+# Live Demo
 
-## 🚀 Frontend (Vercel)
+## Frontend (Vercel)
 https://sports-prediction-platform.vercel.app
 
-## ⚡ Backend API (Render)
+## Backend API (Render)
 https://sports-prediction-platform.onrender.com
 
 ---
 
-# 📸 Preview
+# Preview
 
-## 🏠 Home Dashboard
+## Home Dashboard
 - Multi-sport landing page
 - Interactive sport cards
 - Dynamic navigation
@@ -38,9 +38,9 @@ https://sports-prediction-platform.onrender.com
 
 ---
 
-# ✨ Features
+# Features
 
-## 🧠 Machine Learning Predictions
+## Machine Learning Predictions
 - Separate ML models for:
   - Soccer
   - NBA
@@ -51,7 +51,7 @@ https://sports-prediction-platform.onrender.com
 
 ---
 
-## ⚙️ Full-Stack Architecture
+## Full-Stack Architecture
 
 ### Frontend
 - React
@@ -75,7 +75,7 @@ https://sports-prediction-platform.onrender.com
 
 ---
 
-# 🏗️ System Architecture
+# System Architecture
 
 ```text
                 ┌────────────────────┐
@@ -97,7 +97,7 @@ https://sports-prediction-platform.onrender.com
 
 ---
 
-# 📊 Machine Learning Pipeline
+# Machine Learning Pipeline
 
 ## Feature Engineering
 Custom rolling statistical features were engineered for each sport, including:
@@ -123,7 +123,7 @@ The resulting dataset was used to train classification models capable of predict
 
 ---
 
-# 🧪 Model Performance
+# Model Performance
 
 | Sport | Model Type | Accuracy |
 |------|------------|----------|
@@ -133,7 +133,7 @@ The resulting dataset was used to train classification models capable of predict
 
 ---
 
-# 🗂️ Project Structure
+# Project Structure
 
 ```text
 sports-prediction-platform/
@@ -180,7 +180,7 @@ sports-prediction-platform/
 
 ---
 
-# 🚀 Deployment
+# Deployment
 
 ## Frontend
 Deployed using:
@@ -196,16 +196,16 @@ Deployed using:
 
 ---
 
-# 🔥 Engineering Challenges Solved
+# Engineering Challenges Solved
 
-## ✅ Cross-Origin Resource Sharing (CORS)
+## Cross-Origin Resource Sharing (CORS)
 Configured FastAPI middleware to securely enable communication between:
 - Vercel frontend
 - Render backend
 
 ---
 
-## ✅ Production Deployment
+## Production Deployment
 Handled:
 - Environment configuration
 - API routing
@@ -214,7 +214,7 @@ Handled:
 
 ---
 
-## ✅ Dynamic Asset Rendering
+## Dynamic Asset Rendering
 Implemented dynamic loading of:
 - NBA logos
 - NFL logos
@@ -223,7 +223,7 @@ Implemented dynamic loading of:
 
 ---
 
-# 💡 Future Improvements
+# Future Improvements
 
 - Live sports API integration
 - User authentication
@@ -234,7 +234,7 @@ Implemented dynamic loading of:
 
 ---
 
-# 🛠️ Technologies Used
+# Technologies Used
 
 ## Frontend
 - React
@@ -259,30 +259,3 @@ Implemented dynamic loading of:
 - GitHub
 
 ---
-
-# 📈 Resume Highlights
-
-- Designed and deployed a full-stack sports prediction platform supporting Soccer, NBA, and NFL game outcome predictions.
-- Engineered machine-learning pipelines with rolling statistical feature generation and trained classification models using historical sports datasets.
-- Built cloud-hosted FastAPI APIs serving real-time predictions to a React frontend deployed on Vercel.
-- Implemented responsive UI components with dynamic team rendering, probability visualizations, and production-ready API integration.
-
----
-
-# 👨‍💻 Author
-
-**Will Piwow**  
-Computer Science @ University of Pittsburgh
-
----
-
-# ⭐ Final Note
-
-This project demonstrates:
-- End-to-end full-stack engineering
-- Production deployment
-- Machine learning integration
-- REST API architecture
-- Real-world debugging and deployment workflows
-
-It was built to simulate the architecture and engineering practices used in modern production web applications.
