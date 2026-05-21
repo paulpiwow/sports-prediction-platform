@@ -12,6 +12,9 @@ https://sports-prediction-platform.vercel.app
 ## Backend API (Render)
 https://sports-prediction-platform.onrender.com
 
+## Demo
+https://youtu.be/wECQg8wuBv4
+
 ---
 
 # Preview
